@@ -94,14 +94,14 @@ public class conectar_base {
     }
     
     public static void crear_usuario(String usuario, String contraseña){
-        String instruccionSQL = "CREATE DATABASE " + usuario;
+        String instruccionSQL = "CREATE DATABASE IF NOT EXISTS " + usuario;
         String serverIP =  "raspibjuan.redirectme.net";
         Statement miStatement;
         try {
-            Connection mi_conexion = DriverManager.getConnection("jdbc:mysql://raspibjuan.redirectme.net:3306/?user=root&raspibjuan.redirectme.net=juanchosanfer19");
+            Connection mi_conexion = DriverManager.getConnection("jdbc:mysql://raspibjuan.redirectme.net:3306/?user=root&password=juanchosanfer19");
             miStatement = mi_conexion.createStatement();
             miStatement.executeUpdate(instruccionSQL);
-            miStatement.executeUpdate("CREATE USER '" + usuario + "'@'" + serverIP + "' IDENTIFIED BY '" + contraseña + "'");
+            miStatement.executeUpdate("CREATE USER " + usuario + "@" + serverIP + " IDENTIFIED BY " + contraseña );
             miStatement.executeUpdate("GRANT ALL PRIVILEGES ON " + usuario + ".* TO '" + usuario + "'@'" + serverIP + "'");
             miStatement.executeUpdate("FLUSH PRIVILEGES");
             miStatement.executeUpdate("CREATE TABLE contraseñas ("
@@ -109,8 +109,9 @@ public class conectar_base {
                                                     + "Usuario VARCHAR(30), "
                                                     + "Contraseña VARCHAR(30))");
             
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "No se pudo crear el usuario, por favor intente nuevamente mas tarde");
+        } catch (Exception e) {
+            //JOptionPane.showMessageDialog(null, "No se pudo crear el usuario, por favor intente nuevamente mas tarde");
+            e.printStackTrace();
         }
     }
     
