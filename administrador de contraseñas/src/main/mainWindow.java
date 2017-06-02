@@ -77,7 +77,7 @@ public class mainWindow extends javax.swing.JFrame {
         Login_contraseña = new javax.swing.JPasswordField();
         jLabel4 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        register = new javax.swing.JButton();
         jLabel11 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -276,10 +276,10 @@ public class mainWindow extends javax.swing.JFrame {
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
         jLabel6.setText("Usuario:");
 
-        jButton1.setText("Registrarse");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        register.setText("Registrarse");
+        register.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                registerActionPerformed(evt);
             }
         });
 
@@ -306,7 +306,7 @@ public class mainWindow extends javax.swing.JFrame {
                         .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(Login_panelLayout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jButton1))
+                        .addComponent(register))
                     .addGroup(Login_panelLayout.createSequentialGroup()
                         .addGap(24, 24, 24)
                         .addGroup(Login_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -332,7 +332,7 @@ public class mainWindow extends javax.swing.JFrame {
                 .addGap(36, 36, 36)
                 .addComponent(Ingreso, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 74, Short.MAX_VALUE)
-                .addComponent(jButton1)
+                .addComponent(register)
                 .addContainerGap())
         );
 
@@ -472,7 +472,6 @@ public class mainWindow extends javax.swing.JFrame {
         char contraseña[] = new char[length];
         contraseña = Login_contraseña.getPassword();
         for (int i = 0; i <= length - 1; i++) pass += contraseña[i];       
-        System.out.print(pass);
         if (usuario == "" | pass == ""){
             JOptionPane.showMessageDialog(null, "Nombre de usuario o contraseña erroneos");
         }else { 
@@ -491,9 +490,16 @@ public class mainWindow extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_IngresoActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void registerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registerActionPerformed
+        String usuario;
+        String pass = "";
+        usuario = Login_usuario.getText();
+        int length = Login_contraseña.getPassword().length;
+        char contraseña[] = new char[length];
+        contraseña = Login_contraseña.getPassword();
+        for (int i = 0; i <= length - 1; i++) pass += contraseña[i];       
+        conectar_base.crear_usuario(usuario, pass);
+    }//GEN-LAST:event_registerActionPerformed
 
     /**
      * @param args the command line arguments
@@ -551,7 +557,6 @@ public class mainWindow extends javax.swing.JFrame {
     private javax.swing.JLabel campo_usuario;
     private javax.swing.JTextField campo_usuario2;
     private javax.swing.JTextField campo_usuario3;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -577,5 +582,6 @@ public class mainWindow extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator8;
     private javax.swing.JSeparator jSeparator9;
     private javax.swing.JTabbedPane main_panel;
+    private javax.swing.JButton register;
     // End of variables declaration//GEN-END:variables
 }
