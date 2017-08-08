@@ -19,7 +19,7 @@ public class conectar_base {
 
             //1.Crear conexion 
             //Connection mi_conexion = DriverManager.getConnection("jdbc:mysql://192.168.0.78:3306/" + base , usuario, contraseña);
-            Connection mi_conexion = DriverManager.getConnection("jdbc:mysql://raspibjuan.redirectme.net:3306/" + base, "root", contraseña);
+            Connection mi_conexion = DriverManager.getConnection("jdbc:mysql://raspberry.myvnc.com:3306/" + base, usuario, contraseña);
 
             //2. Crear objeto Statement
             miStatement = mi_conexion.createStatement();
@@ -30,7 +30,7 @@ public class conectar_base {
             //}
         } catch (SQLException e) {
             try {
-                Connection mi_conexion = DriverManager.getConnection("jdbc:mysql://192.168.0.78:3306/" + base , usuario, contraseña);
+                Connection mi_conexion = DriverManager.getConnection("jdbc:mysql://192.168.0.14:3306/" + base , usuario, contraseña);
                 //Connection mi_conexion = DriverManager.getConnection("jdbc:mysql://raspibjuan.redirectme.net:3306/" + base, usuario, contraseña);
                 miStatement = mi_conexion.createStatement();
             } catch (SQLException ex) {
@@ -91,29 +91,5 @@ public class conectar_base {
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "No se pudo modificar la cuenta, por favor intente nuevamente mas tarde");
         }
-    }
-    
-    public static void crear_usuario(String usuario, String contraseña){
-        String instruccionSQL = "CREATE DATABASE IF NOT EXISTS " + usuario;
-        String serverIP =  "raspibjuan.redirectme.net";
-        Statement miStatement;
-        try {
-            Connection mi_conexion = DriverManager.getConnection("jdbc:mysql://raspibjuan.redirectme.net:3306/?user=root&password=juanchosanfer19");
-            miStatement = mi_conexion.createStatement();
-            miStatement.executeUpdate(instruccionSQL);
-            miStatement.executeUpdate("CREATE USER " + usuario + "@" + serverIP + " IDENTIFIED BY " + contraseña );
-            miStatement.executeUpdate("GRANT ALL PRIVILEGES ON " + usuario + ".* TO '" + usuario + "'@'" + serverIP + "'");
-            miStatement.executeUpdate("FLUSH PRIVILEGES");
-            miStatement.executeUpdate("CREATE TABLE contraseñas ("
-                                                    + "Cuenta VARCHAR(30), "
-                                                    + "Usuario VARCHAR(30), "
-                                                    + "Contraseña VARCHAR(30))");
-            
-        } catch (Exception e) {
-            //JOptionPane.showMessageDialog(null, "No se pudo crear el usuario, por favor intente nuevamente mas tarde");
-            e.printStackTrace();
-        }
-    }
-    
-    
+    }   
 }

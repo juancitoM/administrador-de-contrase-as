@@ -47,7 +47,6 @@ public class mainWindow extends javax.swing.JFrame {
         campo_cuenta = new javax.swing.JLabel();
         Consulta = new javax.swing.JButton();
         campo_usuario = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
         jSeparator7 = new javax.swing.JSeparator();
@@ -77,8 +76,6 @@ public class mainWindow extends javax.swing.JFrame {
         Login_contraseña = new javax.swing.JPasswordField();
         jLabel4 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        register = new javax.swing.JButton();
-        jLabel11 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBounds(new java.awt.Rectangle(500, 100, 0, 0));
@@ -140,9 +137,6 @@ public class mainWindow extends javax.swing.JFrame {
         campo_usuario.setBackground(new java.awt.Color(5, 14, 22));
         campo_usuario.setForeground(new java.awt.Color(255, 255, 255));
         jPanel2.add(campo_usuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 210, 230, 30));
-
-        jButton2.setText("jButton2");
-        jPanel2.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(273, 10, 50, 40));
 
         main_panel.addTab("Consulta", jPanel2);
 
@@ -276,17 +270,6 @@ public class mainWindow extends javax.swing.JFrame {
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
         jLabel6.setText("Usuario:");
 
-        register.setText("Registrarse");
-        register.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                registerActionPerformed(evt);
-            }
-        });
-
-        jLabel11.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
-        jLabel11.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel11.setText("Sign in or Sign up");
-
         javax.swing.GroupLayout Login_panelLayout = new javax.swing.GroupLayout(Login_panel);
         Login_panel.setLayout(Login_panelLayout);
         Login_panelLayout.setHorizontalGroup(
@@ -305,21 +288,14 @@ public class mainWindow extends javax.swing.JFrame {
                         .addGap(112, 112, 112)
                         .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(Login_panelLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(register))
-                    .addGroup(Login_panelLayout.createSequentialGroup()
                         .addGap(24, 24, 24)
-                        .addGroup(Login_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(56, Short.MAX_VALUE))
         );
         Login_panelLayout.setVerticalGroup(
             Login_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(Login_panelLayout.createSequentialGroup()
-                .addGap(18, 18, 18)
-                .addComponent(jLabel11)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(39, 39, 39)
                 .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(47, 47, 47)
                 .addGroup(Login_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -331,9 +307,7 @@ public class mainWindow extends javax.swing.JFrame {
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(36, 36, 36)
                 .addComponent(Ingreso, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 74, Short.MAX_VALUE)
-                .addComponent(register)
-                .addContainerGap())
+                .addContainerGap(108, Short.MAX_VALUE))
         );
 
         Slider.add(Login_panel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 350, 470));
@@ -490,17 +464,6 @@ public class mainWindow extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_IngresoActionPerformed
 
-    private void registerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registerActionPerformed
-        String usuario;
-        String pass = "";
-        usuario = Login_usuario.getText();
-        int length = Login_contraseña.getPassword().length;
-        char contraseña[] = new char[length];
-        contraseña = Login_contraseña.getPassword();
-        for (int i = 0; i <= length - 1; i++) pass += contraseña[i];       
-        conectar_base.crear_usuario(usuario, pass);
-    }//GEN-LAST:event_registerActionPerformed
-
     /**
      * @param args the command line arguments
      */
@@ -557,10 +520,8 @@ public class mainWindow extends javax.swing.JFrame {
     private javax.swing.JLabel campo_usuario;
     private javax.swing.JTextField campo_usuario2;
     private javax.swing.JTextField campo_usuario3;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -582,6 +543,5 @@ public class mainWindow extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator8;
     private javax.swing.JSeparator jSeparator9;
     private javax.swing.JTabbedPane main_panel;
-    private javax.swing.JButton register;
     // End of variables declaration//GEN-END:variables
 }
