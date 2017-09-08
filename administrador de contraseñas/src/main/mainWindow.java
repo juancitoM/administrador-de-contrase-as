@@ -1,12 +1,12 @@
 package main;
+
 /*
 
 Versionado del programa = 2017.05.1r1
 
-*/
+ */
 import diu.swe.habib.JPanelSlider.JPanelSlider;
 import java.awt.Color;
-import java.awt.Font;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -15,10 +15,12 @@ import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
 public class mainWindow extends javax.swing.JFrame {
+
     private String version$ = "2017.05.1r1";
     private ResultSet rta;
     private conectar_base base;
-    
+    private String usuario_log;
+
     public mainWindow() {
         initComponents();
         setIconImage(new ImageIcon(getClass().getResource("/imagenes/Key 2_80px.png")).getImage());
@@ -44,8 +46,9 @@ public class mainWindow extends javax.swing.JFrame {
         Cuentas = new javax.swing.JComboBox<>();
         campo_contraseña = new javax.swing.JLabel();
         campo_cuenta = new javax.swing.JLabel();
-        Consulta = new javax.swing.JButton();
         campo_usuario = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel13 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
         jSeparator7 = new javax.swing.JSeparator();
@@ -108,7 +111,7 @@ public class mainWindow extends javax.swing.JFrame {
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("Contraseña:");
         jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 296, -1, -1));
-        jPanel2.add(jSeparator3, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 350, 240, 10));
+        jPanel2.add(jSeparator3, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 350, 230, 10));
 
         Cuentas.setBorder(null);
         Cuentas.addActionListener(new java.awt.event.ActionListener() {
@@ -126,19 +129,43 @@ public class mainWindow extends javax.swing.JFrame {
         campo_cuenta.setForeground(new java.awt.Color(255, 255, 255));
         jPanel2.add(campo_cuenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 94, 230, 30));
 
-        Consulta.setText("Buscar");
-        Consulta.setBorderPainted(false);
-        Consulta.setFocusPainted(false);
-        Consulta.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ConsultaActionPerformed(evt);
-            }
-        });
-        jPanel2.add(Consulta, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 380, 240, 30));
-
         campo_usuario.setBackground(new java.awt.Color(5, 14, 22));
         campo_usuario.setForeground(new java.awt.Color(255, 255, 255));
         jPanel2.add(campo_usuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 210, 230, 30));
+
+        jPanel1.setBackground(new java.awt.Color(25, 162, 95));
+        jPanel1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jPanel1MouseClicked(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jPanel1MousePressed(evt);
+            }
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                jPanel1MouseReleased(evt);
+            }
+        });
+
+        jLabel13.setText("Buscar");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(62, 62, 62)
+                .addComponent(jLabel13)
+                .addContainerGap(76, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel13)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jPanel2.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 376, 170, 30));
 
         main_panel.addTab("Consulta", jPanel2);
 
@@ -398,7 +425,7 @@ public class mainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_main_panelStateChanged
 
     private void ModificaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ModificaActionPerformed
-        String cuenta = (String)Cuentas2.getSelectedItem();
+        String cuenta = (String) Cuentas2.getSelectedItem();
         String usuario = campo_usuario3.getText();
         String contraseña = campo_contraseña3.getText();
 
@@ -419,7 +446,7 @@ public class mainWindow extends javax.swing.JFrame {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        */
+         */
     }//GEN-LAST:event_Cuentas2ActionPerformed
 
     private void campo_cuenta3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_campo_cuenta3ActionPerformed
@@ -434,9 +461,10 @@ public class mainWindow extends javax.swing.JFrame {
         String cuenta = campo_cuenta2.getText();
         String usuario = campo_usuario2.getText();
         String contraseña = campo_contraseña2.getText();
-
-        base.insertar_cuenta(cuenta, usuario, contraseña);
-
+        int id;
+        
+        id = base.consulta_ID(usuario_log);
+        base.insertar_cuenta(cuenta, usuario, contraseña, id);
         campo_cuenta2.setText("");
         campo_usuario2.setText("");
         campo_contraseña2.setText("");
@@ -449,7 +477,7 @@ public class mainWindow extends javax.swing.JFrame {
                 Cuentas2.addItem(rta.getString("Cuenta"));
             }
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
     }//GEN-LAST:event_AgregaActionPerformed
 
@@ -466,6 +494,7 @@ public class mainWindow extends javax.swing.JFrame {
         rta = base.consulta_cuentas("contraseñas");
         try {
             while (rta.next()) {
+
                 Cuentas.addItem(rta.getString("Cuenta"));
                 Cuentas2.addItem(rta.getString("Cuenta"));
             }
@@ -474,8 +503,87 @@ public class mainWindow extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_QuitaActionPerformed
 
-    private void ConsultaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ConsultaActionPerformed
-        rta = base.consulta_base("contraseñas", (String) Cuentas.getSelectedItem());
+    private void CuentasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CuentasActionPerformed
+
+    }//GEN-LAST:event_CuentasActionPerformed
+
+    private void Boton_ingresoMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Boton_ingresoMouseReleased
+        Color color = new Color(25, 162, 95);
+        Boton_ingreso.setBackground(color);
+    }//GEN-LAST:event_Boton_ingresoMouseReleased
+
+    private void Boton_ingresoMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Boton_ingresoMousePressed
+        Color color = new Color(16, 108, 63);
+        Boton_ingreso.setBackground(color);
+    }//GEN-LAST:event_Boton_ingresoMousePressed
+
+    private void Boton_ingresoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Boton_ingresoMouseClicked
+        String usuario = Login_usuario.getText();
+        String base = usuario;
+        usuario_log = usuario;
+        String pass = "";
+        boolean login = false;
+        int length = Login_contraseña.getPassword().length;
+        char contraseña[] = new char[length];
+        contraseña = Login_contraseña.getPassword();
+        for (int i = 0; i <= length - 1; i++) {
+            pass += contraseña[i];
+        }
+
+        if (!(pass.equals("") | usuario.equals(""))) {
+            try {
+
+                rta = this.base.consulta_usuario("USUARIOS", usuario, pass);
+                if (!rta.next()) {
+                    int dialogButton = JOptionPane.YES_NO_OPTION;
+                    int dialogResult = JOptionPane.showConfirmDialog(null, "¿Desea crear un usuario nuevo?", "No existe el usuario", dialogButton);
+                    if (dialogResult == JOptionPane.YES_OPTION) {
+                        this.base.crear_usuario(usuario, pass);
+                        System.out.println("Crear cuenta");
+                        login = true;
+                    }
+
+                    System.out.println("No existe la cuenta");
+
+                } else {
+                    login = true;
+                }
+
+                if (login == true) {
+                    try {
+                        rta = this.base.consulta_cuentas("contraseñas");
+                        while (rta.next()) {
+                            Cuentas.addItem(rta.getString("Cuenta"));
+                            Cuentas2.addItem(rta.getString("Cuenta"));
+                        }
+                    } catch (Exception e) {
+
+                    }
+                    Slider.add(main_panel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 350, 470));
+                    Slider.nextPanel(5, jPanel2, JPanelSlider.left);
+                }
+            } catch (SQLException ex) {
+
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Nombre de usuario o contraseña erroneos");
+        }
+    }//GEN-LAST:event_Boton_ingresoMouseClicked
+
+    private void jPanel1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MousePressed
+        Color color = new Color(16, 108, 63);
+        jPanel1.setBackground(color);
+    }//GEN-LAST:event_jPanel1MousePressed
+
+    private void jPanel1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MouseReleased
+        Color color = new Color(25, 162, 95);
+        jPanel1.setBackground(color);
+    }//GEN-LAST:event_jPanel1MouseReleased
+
+    private void jPanel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MouseClicked
+        
+        
+        rta = base.consulta_base("contraseñas", (String) Cuentas.getSelectedItem(), usuario_log);
         try {
             while (rta.next()) {
                 campo_cuenta.setText((String) Cuentas.getSelectedItem());
@@ -485,65 +593,11 @@ public class mainWindow extends javax.swing.JFrame {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }//GEN-LAST:event_ConsultaActionPerformed
+    }//GEN-LAST:event_jPanel1MouseClicked
 
-    private void CuentasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CuentasActionPerformed
-
-    }//GEN-LAST:event_CuentasActionPerformed
-
-    private void Boton_ingresoMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Boton_ingresoMouseReleased
-        Color color =  new Color(25, 162, 95);
-        Boton_ingreso.setBackground(color);
-    }//GEN-LAST:event_Boton_ingresoMouseReleased
-
-    private void Boton_ingresoMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Boton_ingresoMousePressed
-        Color color =  new Color(16, 108, 63);
-        Boton_ingreso.setBackground(color);
-    }//GEN-LAST:event_Boton_ingresoMousePressed
-
-    private void Boton_ingresoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Boton_ingresoMouseClicked
-        String usuario = Login_usuario.getText();
-        String base = usuario;
-        String pass = "";
-        int length = Login_contraseña.getPassword().length;
-        char contraseña[] = new char[length];
-        contraseña = Login_contraseña.getPassword();
-        for (int i = 0; i <= length - 1; i++) pass += contraseña[i];
-
-        if (!(pass.equals("") | usuario.equals(""))){
-            try {
-                //rta = this.base.consulta_cuentas("contraseñas");
-                rta = this.base.consulta_usuario("USUARIOS", usuario, pass);
-                if (!rta.next()){
-                    System.out.println("No existe la cuenta");
-                    //String user = rta.getString(base);
-                    //System.out.println(user);
-                }
-                /* try {
-                while (rta.next()) {
-                Cuentas.addItem(rta.getString("Cuenta"));
-                Cuentas2.addItem(rta.getString("Cuenta"));
-                }
-                } catch (Exception e) {
-                
-                }
-                Slider.add(main_panel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 350, 470));
-                Slider.nextPanel(5, jPanel2, JPanelSlider.left);
-                */
-            } catch (SQLException ex) {
-                Logger.getLogger(mainWindow.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }else {
-            JOptionPane.showMessageDialog(null, "Nombre de usuario o contraseña erroneos");
-        }
-    }//GEN-LAST:event_Boton_ingresoMouseClicked
-
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+ /* //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
@@ -566,7 +620,6 @@ public class mainWindow extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new mainWindow().setVisible(true);
@@ -577,7 +630,6 @@ public class mainWindow extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Agrega;
     private javax.swing.JPanel Boton_ingreso;
-    private javax.swing.JButton Consulta;
     private javax.swing.JComboBox<String> Cuentas;
     private javax.swing.JComboBox<String> Cuentas2;
     private javax.swing.JPasswordField Login_contraseña;
@@ -599,6 +651,7 @@ public class mainWindow extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -607,6 +660,7 @@ public class mainWindow extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;

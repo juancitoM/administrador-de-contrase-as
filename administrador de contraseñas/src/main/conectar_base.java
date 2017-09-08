@@ -10,6 +10,7 @@ public class conectar_base {
     private Statement st;
     private ResultSet rta;
     private Connection conn;
+    static int ID = 1;
 
     public conectar_base() {
 
@@ -34,16 +35,20 @@ public class conectar_base {
             ResultSet rs = dbmd.getTables(null, null, "CONTRASEÑAS", null);
             if (!rs.next()) {
                 st.execute("CREATE TABLE contraseñas ( "
+                        + "Id INT NOT NULL, "
                         + "Cuenta VARCHAR(25) NOT NULL, "
                         + "Usuario VARCHAR(25) NOT NULL, "
-                        + "Contraseña VARCHAR(25) NOT NULL "
+                        + "Contraseña VARCHAR(25) NOT NULL, "
+                        + "PRIMARY KEY (Id)"
                         + ")");
             }
             rs = dbmd.getTables(null, null, "USUARIOS", null);
             if (!rs.next()) {
-                st.execute("CREATE TABLE Usuarios ( "                    
+                st.execute("CREATE TABLE Usuarios ( "
+                        + "Id INT NOT NULL, "
                         + "Usuario VARCHAR(25) NOT NULL, "
-                        + "Contraseña VARCHAR(25) NOT NULL "
+                        + "Contraseña VARCHAR(25) NOT NULL, "
+                        + "PRIMARY KEY (Id) "
                         + ")");
             }
         } catch (Exception e) {
@@ -51,48 +56,76 @@ public class conectar_base {
         }
     }
 
-    public ResultSet consulta_base(String tabla, String cuenta) {
+    public ResultSet consulta_base(String tabla, String cuenta, String user) {
         try {
             //3. Ejecutar SQL
-            rta = st.executeQuery("SELECT * FROM " + tabla + " WHERE CUENTA = '" + cuenta + "'");
+            rta = st.executeQuery("SELECT * FROM " + tabla + " psw INNER JOIN usuarios us on psw.ID = us.ID"
+                               + " WHERE us.USUARIO = '" + user + "'");
         } catch (SQLException ex) {
             //Logger.getLogger(conecta_base.class.getName()).log(Level.SEVERE, null, ex);
             ex.printStackTrace();
         }
         return rta;
     }
-        public ResultSet consulta_usuario(String tabla, String cuenta, String contraseña) {
+
+    public ResultSet consulta_usuario(String tabla, String cuenta, String contraseña) {
         try {
             //3. Ejecutar SQL
-            rta = st.executeQuery("SELECT * FROM " + tabla + " WHERE CUENTA = '" + cuenta + "' AND CONTRASEÑA = " + contraseña + "'");
+            rta = st.executeQuery("SELECT * FROM " + tabla + " WHERE USUARIO = '" + cuenta + "' AND CONTRASEÑA = '" + contraseña + "'");
         } catch (SQLException ex) {
             //Logger.getLogger(conecta_base.class.getName()).log(Level.SEVERE, null, ex);
             ex.printStackTrace();
         }
         return rta;
     }
-    
-    
+
+    public int consulta_ID(String user) {
+        int id = 0;
+
+        try {
+            //3. Ejecutar SQL
+            rta = st.executeQuery("SELECT * FROM usuarios WHERE usuario = '" + user + "'");
+            id = rta.getInt("ID");
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return id;
+    }
 
     public ResultSet consulta_cuentas(String tabla) {
         try {
             //3. Ejecutar SQL
-            rta = st.executeQuery("SELECT Cuenta FROM " + tabla);
+            rta = st.executeQuery("SELECT CUENTA FROM " + tabla);
+
         } catch (SQLException ex) {
-            //Logger.getLogger(conecta_base.class.getName()).log(Level.SEVERE, null, ex);
             ex.printStackTrace();
         }
         return rta;
     }
 
-    public void insertar_cuenta(String cuenta, String usuario, String contraseña) {
-        String instruccionSQL = "INSERT INTO contraseñas (Cuenta, Usuario, Contraseña) "
-                + "VALUES ('" + cuenta + "','" + usuario + "','" + contraseña + "')";
+    public void insertar_cuenta(String cuenta, String usuario, String contraseña, int id) {
+        String instruccionSQL = "INSERT INTO contraseñas "
+                + "VALUES ('" + id + "','" + cuenta + "','" + usuario + "','" + contraseña + "')";
+
         try {
             st.executeUpdate(instruccionSQL);
             JOptionPane.showMessageDialog(null, "La cuenta se ha creado correctamente");
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "No se pudo crear la cuenta, por favor intente nuevamente mas tarde");
+
+        }
+    }
+
+    public void crear_usuario(String usuario, String contraseña) {
+        String instruccionSQL = "INSERT INTO USUARIOS VALUES('" + ID + "','" + usuario + "','" + contraseña + "')";
+        ID += 1;
+        try {
+            st.executeUpdate(instruccionSQL);
+            JOptionPane.showMessageDialog(null, "El usuario ha sido creado");
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "No se pudo crear el usuario, por favor intente nuevamente mas tarde");
+
         }
     }
 
