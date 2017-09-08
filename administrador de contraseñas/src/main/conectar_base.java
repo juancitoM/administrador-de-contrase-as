@@ -1,48 +1,51 @@
 package main;
 
-import java.io.IOException;
 import java.sql.*;
-import java.util.logging.FileHandler;
-import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 public class conectar_base {
        
-    private Statement miStatement;
+    private Statement st;
     private ResultSet rta;
+    private Connection conn;
 
-    public conectar_base(String base, String usuario, String contraseña) {
+    public conectar_base() {
         
         try {
+            String driver = "org.apache.derby.jdbc.EmbeddedDriver";
 
-            //1.Crear conexion 
-            //Connection mi_conexion = DriverManager.getConnection("jdbc:mysql://192.168.0.78:3306/" + base , usuario, contraseña);
-            Connection mi_conexion = DriverManager.getConnection("jdbc:mysql://raspberry.myvnc.com:3306/" + base, usuario, contraseña);
+            Class.forName(driver);          
 
-            //2. Crear objeto Statement
-            miStatement = mi_conexion.createStatement();
+            
+             conn = DriverManager.getConnection("jdbc:derby:" + cfg.host_base + ";create=true");
 
-            //4.Leer el resultset
-            //while (rta.next()) {
-            //   System.out.println("Contraseña: " + rta.getString("Contraseña") + " Usuario: " + rta.getString("Usuario"));
-            //}
-        } catch (SQLException e) {
-            try {
-                Connection mi_conexion = DriverManager.getConnection("jdbc:mysql://192.168.0.14:3306/" + base , usuario, contraseña);
-                //Connection mi_conexion = DriverManager.getConnection("jdbc:mysql://raspibjuan.redirectme.net:3306/" + base, usuario, contraseña);
-                miStatement = mi_conexion.createStatement();
-            } catch (SQLException ex) {
+            
+        } catch (Exception e) {
+                e.printStackTrace();
                 JOptionPane.showMessageDialog(null, "No hay conexion con la base de datos");
-            }
+            
+        } 
+    }
+    public void crear_tabla(){
+        try {
+            st = conn.createStatement();
+            st.execute("CREATE TABLE contraseñas ( "
+                    + "Cuenta VARCHAR(25) NOT NULL, "
+                    + "Usuario VARCHAR(25) NOT NULL, "
+                    + "Contraseña VARCHAR(25) NOT NULL "
+                    + ")");
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(conectar_base.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    
     public ResultSet consulta_base(String tabla, String cuenta) {
         try {
             //3. Ejecutar SQL
-            rta = miStatement.executeQuery("SELECT * FROM " + tabla + " WHERE CUENTA = '" + cuenta + "'");
+            rta = st.executeQuery("SELECT * FROM " + tabla + " WHERE CUENTA = '" + cuenta + "'");
         } catch (SQLException ex) {
             //Logger.getLogger(conecta_base.class.getName()).log(Level.SEVERE, null, ex);
             ex.printStackTrace();
@@ -53,7 +56,7 @@ public class conectar_base {
     public ResultSet consulta_cuentas(String tabla) {
         try {
             //3. Ejecutar SQL
-            rta = miStatement.executeQuery("SELECT Cuenta FROM " + tabla);
+            rta = st.executeQuery("SELECT Cuenta FROM " + tabla);
         } catch (SQLException ex) {
             //Logger.getLogger(conecta_base.class.getName()).log(Level.SEVERE, null, ex);
             ex.printStackTrace();
@@ -65,7 +68,7 @@ public class conectar_base {
         String instruccionSQL = "INSERT INTO contraseñas (Cuenta, Usuario, Contraseña) " +
                                 "VALUES ('" + cuenta + "','" + usuario + "','" + contraseña + "')";
         try {
-            miStatement.executeUpdate(instruccionSQL);
+            st.executeUpdate(instruccionSQL);
             JOptionPane.showMessageDialog(null, "La cuenta se ha creado correctamente");
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "No se pudo crear la cuenta, por favor intente nuevamente mas tarde");
@@ -75,7 +78,7 @@ public class conectar_base {
     public void quitar_cuenta(String cuenta) {
         String instruccionSQL = "DELETE FROM contraseñas WHERE Cuenta = '" + cuenta + "'";
         try {
-            miStatement.executeUpdate(instruccionSQL);
+            st.executeUpdate(instruccionSQL);
             JOptionPane.showMessageDialog(null, "La cuenta se ha eliminado correctamente");
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "No se pudo eliminar la cuenta, por favor intente nuevamente mas tarde");
@@ -86,7 +89,7 @@ public class conectar_base {
         String instruccionSQL = "UPDATE contraseñas SET Usuario = '" + usuario + "', Contraseña = '" + contraseña +
                                 "' WHERE Cuenta = '" + cuenta + "'";
         try {
-            miStatement.executeUpdate(instruccionSQL);
+            st.executeUpdate(instruccionSQL);
             JOptionPane.showMessageDialog(null, "La cuenta se ha modificado correctamente");
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "No se pudo modificar la cuenta, por favor intente nuevamente mas tarde");

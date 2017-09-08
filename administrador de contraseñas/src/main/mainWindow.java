@@ -5,11 +5,9 @@ Versionado del programa = 2017.05.1r1
 
 */
 import diu.swe.habib.JPanelSlider.JPanelSlider;
-import java.io.IOException;
+import java.awt.Color;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.logging.FileHandler;
-import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
@@ -19,14 +17,14 @@ public class mainWindow extends javax.swing.JFrame {
     private String version$ = "2017.05.1r1";
     private ResultSet rta;
     private conectar_base base;
-
     
     public mainWindow() {
         initComponents();
         setIconImage(new ImageIcon(getClass().getResource("/imagenes/Key 2_80px.png")).getImage());
         Slider.remove(main_panel);
-
-
+        new cfg();
+        base = new conectar_base();
+        base.crear_tabla();
     }
 
     @SuppressWarnings("unchecked")
@@ -72,10 +70,11 @@ public class mainWindow extends javax.swing.JFrame {
         Login_panel = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         Login_usuario = new javax.swing.JTextField();
-        Ingreso = new javax.swing.JButton();
         Login_contraseña = new javax.swing.JPasswordField();
         jLabel4 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
+        Boton_ingreso = new javax.swing.JPanel();
+        jLabel11 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBounds(new java.awt.Rectangle(500, 100, 0, 0));
@@ -257,23 +256,53 @@ public class mainWindow extends javax.swing.JFrame {
         jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Lock_96px.png"))); // NOI18N
         jLabel5.setText("jLabel5");
 
-        Ingreso.setText("Ingresar");
-        Ingreso.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                IngresoActionPerformed(evt);
-            }
-        });
-
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("Contraseña:");
 
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
         jLabel6.setText("Usuario:");
 
+        Boton_ingreso.setBackground(new java.awt.Color(25, 162, 95));
+        Boton_ingreso.setName("Ingreso"); // NOI18N
+        Boton_ingreso.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                Boton_ingresoMouseClicked(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                Boton_ingresoMousePressed(evt);
+            }
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                Boton_ingresoMouseReleased(evt);
+            }
+        });
+
+        jLabel11.setText("Ingreso");
+
+        javax.swing.GroupLayout Boton_ingresoLayout = new javax.swing.GroupLayout(Boton_ingreso);
+        Boton_ingreso.setLayout(Boton_ingresoLayout);
+        Boton_ingresoLayout.setHorizontalGroup(
+            Boton_ingresoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(Boton_ingresoLayout.createSequentialGroup()
+                .addGap(81, 81, 81)
+                .addComponent(jLabel11)
+                .addContainerGap(89, Short.MAX_VALUE))
+        );
+        Boton_ingresoLayout.setVerticalGroup(
+            Boton_ingresoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(Boton_ingresoLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel11)
+                .addContainerGap(15, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout Login_panelLayout = new javax.swing.GroupLayout(Login_panel);
         Login_panel.setLayout(Login_panelLayout);
         Login_panelLayout.setHorizontalGroup(
             Login_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, Login_panelLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(Boton_ingreso, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(67, 67, 67))
             .addGroup(Login_panelLayout.createSequentialGroup()
                 .addGroup(Login_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(Login_panelLayout.createSequentialGroup()
@@ -281,23 +310,22 @@ public class mainWindow extends javax.swing.JFrame {
                         .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(Login_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(Ingreso, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(Login_usuario, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(Login_contraseña, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(Login_panelLayout.createSequentialGroup()
-                        .addGap(112, 112, 112)
-                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(Login_panelLayout.createSequentialGroup()
                         .addGap(24, 24, 24)
-                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(Login_panelLayout.createSequentialGroup()
+                        .addGap(126, 126, 126)
+                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(56, Short.MAX_VALUE))
         );
         Login_panelLayout.setVerticalGroup(
             Login_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(Login_panelLayout.createSequentialGroup()
-                .addGap(39, 39, 39)
+                .addGap(41, 41, 41)
                 .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(47, 47, 47)
+                .addGap(45, 45, 45)
                 .addGroup(Login_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(Login_usuario, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -305,10 +333,12 @@ public class mainWindow extends javax.swing.JFrame {
                 .addGroup(Login_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(Login_contraseña, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(36, 36, 36)
-                .addComponent(Ingreso, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(108, Short.MAX_VALUE))
+                .addGap(60, 60, 60)
+                .addComponent(Boton_ingreso, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(81, Short.MAX_VALUE))
         );
+
+        Boton_ingreso.getAccessibleContext().setAccessibleName("Ingresar");
 
         Slider.add(Login_panel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 350, 470));
 
@@ -438,18 +468,16 @@ public class mainWindow extends javax.swing.JFrame {
 
     }//GEN-LAST:event_CuentasActionPerformed
 
-    private void IngresoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_IngresoActionPerformed
+    private void Boton_ingresoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Boton_ingresoMouseClicked
         String usuario = Login_usuario.getText();
         String base = usuario;
         String pass = "";
         int length = Login_contraseña.getPassword().length;
         char contraseña[] = new char[length];
         contraseña = Login_contraseña.getPassword();
-        for (int i = 0; i <= length - 1; i++) pass += contraseña[i];       
-        if (usuario == "" | pass == ""){
-            JOptionPane.showMessageDialog(null, "Nombre de usuario o contraseña erroneos");
-        }else { 
-            this.base = new conectar_base(base, usuario, pass);
+        for (int i = 0; i <= length - 1; i++) pass += contraseña[i];
+        if (!(pass.equals("") | usuario.equals(""))){
+            this.base = new conectar_base();
             rta = this.base.consulta_cuentas("contraseñas");
             try {
                 while (rta.next()) {
@@ -461,8 +489,20 @@ public class mainWindow extends javax.swing.JFrame {
             }
             Slider.add(main_panel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 350, 470));
             Slider.nextPanel(5, jPanel2, JPanelSlider.left);
+        }else {
+            JOptionPane.showMessageDialog(null, "Nombre de usuario o contraseña erroneos");
         }
-    }//GEN-LAST:event_IngresoActionPerformed
+    }//GEN-LAST:event_Boton_ingresoMouseClicked
+
+    private void Boton_ingresoMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Boton_ingresoMousePressed
+        Color color =  new Color(16, 108, 63);
+        Boton_ingreso.setBackground(color);
+    }//GEN-LAST:event_Boton_ingresoMousePressed
+
+    private void Boton_ingresoMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Boton_ingresoMouseReleased
+        Color color =  new Color(25, 162, 95);
+        Boton_ingreso.setBackground(color);
+    }//GEN-LAST:event_Boton_ingresoMouseReleased
 
     /**
      * @param args the command line arguments
@@ -492,6 +532,7 @@ public class mainWindow extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
+
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new mainWindow().setVisible(true);
@@ -501,10 +542,10 @@ public class mainWindow extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Agrega;
+    private javax.swing.JPanel Boton_ingreso;
     private javax.swing.JButton Consulta;
     private javax.swing.JComboBox<String> Cuentas;
     private javax.swing.JComboBox<String> Cuentas2;
-    private javax.swing.JButton Ingreso;
     private javax.swing.JPasswordField Login_contraseña;
     private javax.swing.JPanel Login_panel;
     private javax.swing.JTextField Login_usuario;
@@ -522,6 +563,7 @@ public class mainWindow extends javax.swing.JFrame {
     private javax.swing.JTextField campo_usuario3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
