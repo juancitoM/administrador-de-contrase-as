@@ -45,10 +45,8 @@ public class conectar_base {
             rs = dbmd.getTables(null, null, "USUARIOS", null);
             if (!rs.next()) {
                 st.execute("CREATE TABLE Usuarios ( "
-                        + "Id INT NOT NULL, "
-                        + "Usuario VARCHAR(25) NOT NULL, "
-                        + "Contraseña VARCHAR(25) NOT NULL, "
-                        + "PRIMARY KEY (Id) "
+                        + "account VARCHAR(25) NOT NULL, "
+                        + "password VARCHAR(25) NOT NULL "
                         + ")");
             }
         } catch (Exception e) {
@@ -71,7 +69,7 @@ public class conectar_base {
     public ResultSet consulta_usuario(String tabla, String cuenta, String contraseña) {
         try {
             //3. Ejecutar SQL
-            rta = st.executeQuery("SELECT * FROM " + tabla + " WHERE USUARIO = '" + cuenta + "' AND CONTRASEÑA = '" + contraseña + "'");
+            rta = st.executeQuery("SELECT * FROM " + tabla + " WHERE account = '" + cuenta + "' AND password = '" + contraseña + "'");
         } catch (SQLException ex) {
             //Logger.getLogger(conecta_base.class.getName()).log(Level.SEVERE, null, ex);
             ex.printStackTrace();
@@ -118,12 +116,13 @@ public class conectar_base {
     }
 
     public void crear_usuario(String usuario, String contraseña) {
-        String instruccionSQL = "INSERT INTO USUARIOS VALUES('" + ID + "','" + usuario + "','" + contraseña + "')";
+        String instruccionSQL = "INSERT INTO USUARIOS (account, password) VALUES('" + usuario + "','" + contraseña + "')";
         ID += 1;
         try {
             st.executeUpdate(instruccionSQL);
             JOptionPane.showMessageDialog(null, "El usuario ha sido creado");
         } catch (SQLException ex) {
+            ex.printStackTrace();
             JOptionPane.showMessageDialog(null, "No se pudo crear el usuario, por favor intente nuevamente mas tarde");
 
         }

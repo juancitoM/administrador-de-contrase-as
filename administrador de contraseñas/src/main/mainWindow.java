@@ -583,12 +583,13 @@ public class mainWindow extends javax.swing.JFrame {
     private void jPanel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MouseClicked
         
         
-        rta = base.consulta_base("contraseñas", (String) Cuentas.getSelectedItem(), usuario_log);
+        //rta = base.consulta_base("contraseñas", (String) Cuentas.getSelectedItem(), usuario_log);
+        rta = this.base.consulta_cuentas("contraseñas");
         try {
             while (rta.next()) {
                 campo_cuenta.setText((String) Cuentas.getSelectedItem());
-                campo_usuario.setText(rta.getString("Usuario"));
-                campo_contraseña.setText(rta.getString("Contraseña"));
+                campo_usuario.setText(rta.getString("Account"));
+                campo_contraseña.setText(rta.getString("Password"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
