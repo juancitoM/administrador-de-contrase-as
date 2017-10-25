@@ -8,8 +8,6 @@ Versionado del programa = 2017.05.1r1
 import java.awt.Color;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import org.apache.log4j.*;
 
@@ -18,12 +16,15 @@ public class mainWindow extends javax.swing.JFrame {
     private String version$ = "2017.05.1r1";
     private ResultSet rta;
     private conectar_base base;
-
+    private static final Logger log = Logger.getLogger(mainWindow.class);
+    
     public mainWindow() {
         initComponents();
         setIconImage(new ImageIcon(getClass().getResource("/imagenes/Key 2_80px.png")).getImage());
         //Slider.remove(main_panel);
+        //System.out.println(System.getProperties("user.dir"));
         new cfg();
+        //PropertyConfigurator.configure(getClass().getResource("/main/log4j.properties"));
         PropertyConfigurator.configure("log4j.properties");
         base = new conectar_base();
         base.crear_tabla();
@@ -33,7 +34,7 @@ public class mainWindow extends javax.swing.JFrame {
                 Cuentas.addItem(rta.getString("cuenta"));
             }
         } catch (SQLException ex) {
-            Logger.getLogger(mainWindow.class.getName()).log(Level.SEVERE, null, ex);
+            log.error("No se pueden agregar las cuentas");
         }
 
     }
@@ -361,7 +362,8 @@ public class mainWindow extends javax.swing.JFrame {
                 Cuentas2.addItem(rta.getString("Cuenta"));
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
+            log.error("Error en Agrega cuentas");
         }
     }//GEN-LAST:event_AgregaActionPerformed
 
@@ -378,12 +380,11 @@ public class mainWindow extends javax.swing.JFrame {
         rta = base.consulta_cuentas("contraseñas");
         try {
             while (rta.next()) {
-
                 Cuentas.addItem(rta.getString("Cuenta"));
                 Cuentas2.addItem(rta.getString("Cuenta"));
             }
         } catch (Exception e) {
-
+            log.error("Error en Quita cuentas");
         }
     }//GEN-LAST:event_QuitaActionPerformed
 
@@ -408,7 +409,8 @@ public class mainWindow extends javax.swing.JFrame {
                 campo_contraseña.setText(rta.getString("contraseña"));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
+            log.error("Error consultando cuentas");
         }
     }//GEN-LAST:event_jPanel1MouseClicked
 
@@ -440,12 +442,8 @@ public class mainWindow extends javax.swing.JFrame {
         }
         //</editor-fold>
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new mainWindow().setVisible(true);
-            }
-        });
+        new mainWindow().setVisible(true);
+
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
