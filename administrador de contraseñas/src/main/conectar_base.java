@@ -1,9 +1,8 @@
 package main;
 
 import java.sql.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import org.apache.log4j.*;
 
 public class conectar_base {
 
@@ -11,7 +10,7 @@ public class conectar_base {
     private ResultSet rta;
     private Connection conn;
     static int ID = 1;
-
+    private final static Logger log = Logger.getLogger(conectar_base.class);
     public conectar_base() {
 
         try {
@@ -21,10 +20,12 @@ public class conectar_base {
 
             conn = DriverManager.getConnection("jdbc:derby:" + cfg.host_base + ";create=true");
 
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "No hay conexion con la base de datos");
-
+            log.error("No hay conexion con la base de datos");
+            System.exit(0);
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -35,30 +36,21 @@ public class conectar_base {
             ResultSet rs = dbmd.getTables(null, null, "CONTRASEÑAS", null);
             if (!rs.next()) {
                 st.execute("CREATE TABLE contraseñas ( "
-                        + "Id INT NOT NULL, "
                         + "Cuenta VARCHAR(25) NOT NULL, "
                         + "Usuario VARCHAR(25) NOT NULL, "
-                        + "Contraseña VARCHAR(25) NOT NULL, "
-                        + "PRIMARY KEY (Id)"
+                        + "Contraseña VARCHAR(25) NOT NULL "
                         + ")");
             }
-            rs = dbmd.getTables(null, null, "USUARIOS", null);
-            if (!rs.next()) {
-                st.execute("CREATE TABLE Usuarios ( "
-                        + "account VARCHAR(25) NOT NULL, "
-                        + "password VARCHAR(25) NOT NULL "
-                        + ")");
-            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public ResultSet consulta_base(String tabla, String cuenta, String user) {
+    public ResultSet consulta_base(String tabla) {
         try {
             //3. Ejecutar SQL
-            rta = st.executeQuery("SELECT * FROM " + tabla + " psw INNER JOIN usuarios us on psw.ID = us.ID"
-                               + " WHERE us.USUARIO = '" + user + "'");
+            rta = st.executeQuery("SELECT * FROM " + tabla );
         } catch (SQLException ex) {
             //Logger.getLogger(conecta_base.class.getName()).log(Level.SEVERE, null, ex);
             ex.printStackTrace();
@@ -102,10 +94,9 @@ public class conectar_base {
         return rta;
     }
 
-    public void insertar_cuenta(String cuenta, String usuario, String contraseña, int id) {
+    public void insertar_cuenta(String cuenta, String usuario, String contraseña) {
         String instruccionSQL = "INSERT INTO contraseñas "
-                + "VALUES ('" + id + "','" + cuenta + "','" + usuario + "','" + contraseña + "')";
-
+                + "VALUES ('" + cuenta + "','" + usuario + "','" + contraseña + "')";
         try {
             st.executeUpdate(instruccionSQL);
             JOptionPane.showMessageDialog(null, "La cuenta se ha creado correctamente");
