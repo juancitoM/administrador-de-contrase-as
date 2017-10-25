@@ -5,29 +5,37 @@ package main;
 Versionado del programa = 2017.05.1r1
 
  */
-import diu.swe.habib.JPanelSlider.JPanelSlider;
 import java.awt.Color;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
-import javax.swing.JOptionPane;
+import org.apache.log4j.*;
 
 public class mainWindow extends javax.swing.JFrame {
 
     private String version$ = "2017.05.1r1";
     private ResultSet rta;
     private conectar_base base;
-    private String usuario_log;
 
     public mainWindow() {
         initComponents();
         setIconImage(new ImageIcon(getClass().getResource("/imagenes/Key 2_80px.png")).getImage());
-        Slider.remove(main_panel);
+        //Slider.remove(main_panel);
         new cfg();
+        PropertyConfigurator.configure("log4j.properties");
         base = new conectar_base();
         base.crear_tabla();
+        rta = base.consulta_cuentas("contraseñas");
+        try {
+            while (rta.next()) {
+                Cuentas.addItem(rta.getString("cuenta"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(mainWindow.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 
     @SuppressWarnings("unchecked")
@@ -71,16 +79,6 @@ public class mainWindow extends javax.swing.JFrame {
         campo_usuario3 = new javax.swing.JTextField();
         Cuentas2 = new javax.swing.JComboBox<>();
         Modifica = new javax.swing.JButton();
-        Login_panel = new javax.swing.JPanel();
-        jLabel5 = new javax.swing.JLabel();
-        Login_usuario = new javax.swing.JTextField();
-        Login_contraseña = new javax.swing.JPasswordField();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        Boton_ingreso = new javax.swing.JPanel();
-        jLabel11 = new javax.swing.JLabel();
-        jSeparator4 = new javax.swing.JSeparator();
-        jSeparator5 = new javax.swing.JSeparator();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBounds(new java.awt.Rectangle(500, 100, 0, 0));
@@ -280,119 +278,6 @@ public class mainWindow extends javax.swing.JFrame {
 
         Slider.add(main_panel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 350, 470));
 
-        Login_panel.setBackground(new java.awt.Color(5, 14, 22));
-
-        jLabel5.setBackground(new java.awt.Color(5, 14, 22));
-        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Lock_96px.png"))); // NOI18N
-        jLabel5.setText("jLabel5");
-
-        Login_usuario.setBackground(new java.awt.Color(5, 14, 22));
-        Login_usuario.setFont(new java.awt.Font("MS UI Gothic", 0, 12)); // NOI18N
-        Login_usuario.setForeground(new java.awt.Color(255, 255, 255));
-        Login_usuario.setBorder(null);
-
-        Login_contraseña.setBackground(new java.awt.Color(5, 14, 22));
-        Login_contraseña.setFont(new java.awt.Font("MS UI Gothic", 0, 12)); // NOI18N
-        Login_contraseña.setForeground(new java.awt.Color(255, 255, 255));
-        Login_contraseña.setBorder(null);
-
-        jLabel4.setFont(new java.awt.Font("MS UI Gothic", 0, 14)); // NOI18N
-        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel4.setText("Contraseña:");
-
-        jLabel6.setFont(new java.awt.Font("MS UI Gothic", 0, 14)); // NOI18N
-        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel6.setText("Usuario:");
-
-        Boton_ingreso.setBackground(new java.awt.Color(25, 162, 95));
-        Boton_ingreso.setName("Ingreso"); // NOI18N
-        Boton_ingreso.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                Boton_ingresoMouseClicked(evt);
-            }
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                Boton_ingresoMousePressed(evt);
-            }
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                Boton_ingresoMouseReleased(evt);
-            }
-        });
-
-        jLabel11.setText("Ingreso");
-
-        javax.swing.GroupLayout Boton_ingresoLayout = new javax.swing.GroupLayout(Boton_ingreso);
-        Boton_ingreso.setLayout(Boton_ingresoLayout);
-        Boton_ingresoLayout.setHorizontalGroup(
-            Boton_ingresoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(Boton_ingresoLayout.createSequentialGroup()
-                .addGap(81, 81, 81)
-                .addComponent(jLabel11)
-                .addContainerGap(89, Short.MAX_VALUE))
-        );
-        Boton_ingresoLayout.setVerticalGroup(
-            Boton_ingresoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(Boton_ingresoLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel11)
-                .addContainerGap(15, Short.MAX_VALUE))
-        );
-
-        javax.swing.GroupLayout Login_panelLayout = new javax.swing.GroupLayout(Login_panel);
-        Login_panel.setLayout(Login_panelLayout);
-        Login_panelLayout.setHorizontalGroup(
-            Login_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, Login_panelLayout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addGroup(Login_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(Boton_ingreso, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(67, 67, 67))
-            .addGroup(Login_panelLayout.createSequentialGroup()
-                .addGroup(Login_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(Login_panelLayout.createSequentialGroup()
-                        .addGap(125, 125, 125)
-                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(Login_panelLayout.createSequentialGroup()
-                        .addGap(84, 84, 84)
-                        .addGroup(Login_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(Login_usuario, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(Login_panelLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(Login_contraseña, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(Login_panelLayout.createSequentialGroup()
-                        .addGap(24, 24, 24)
-                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(52, Short.MAX_VALUE))
-        );
-        Login_panelLayout.setVerticalGroup(
-            Login_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(Login_panelLayout.createSequentialGroup()
-                .addGap(32, 32, 32)
-                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(45, 45, 45)
-                .addGroup(Login_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(Login_usuario, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 2, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(37, 37, 37)
-                .addGroup(Login_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(Login_contraseña, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
-                .addComponent(Boton_ingreso, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(49, 49, 49))
-        );
-
-        Boton_ingreso.getAccessibleContext().setAccessibleName("Ingresar");
-
-        Slider.add(Login_panel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 350, 470));
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -462,9 +347,8 @@ public class mainWindow extends javax.swing.JFrame {
         String usuario = campo_usuario2.getText();
         String contraseña = campo_contraseña2.getText();
         int id;
-        
-        id = base.consulta_ID(usuario_log);
-        base.insertar_cuenta(cuenta, usuario, contraseña, id);
+
+        base.insertar_cuenta(cuenta, usuario, contraseña);
         campo_cuenta2.setText("");
         campo_usuario2.setText("");
         campo_contraseña2.setText("");
@@ -503,98 +387,34 @@ public class mainWindow extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_QuitaActionPerformed
 
-    private void CuentasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CuentasActionPerformed
-
-    }//GEN-LAST:event_CuentasActionPerformed
-
-    private void Boton_ingresoMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Boton_ingresoMouseReleased
+    private void jPanel1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MouseReleased
         Color color = new Color(25, 162, 95);
-        Boton_ingreso.setBackground(color);
-    }//GEN-LAST:event_Boton_ingresoMouseReleased
-
-    private void Boton_ingresoMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Boton_ingresoMousePressed
-        Color color = new Color(16, 108, 63);
-        Boton_ingreso.setBackground(color);
-    }//GEN-LAST:event_Boton_ingresoMousePressed
-
-    private void Boton_ingresoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Boton_ingresoMouseClicked
-        String usuario = Login_usuario.getText();
-        String base = usuario;
-        usuario_log = usuario;
-        String pass = "";
-        boolean login = false;
-        int length = Login_contraseña.getPassword().length;
-        char contraseña[] = new char[length];
-        contraseña = Login_contraseña.getPassword();
-        for (int i = 0; i <= length - 1; i++) {
-            pass += contraseña[i];
-        }
-
-        if (!(pass.equals("") | usuario.equals(""))) {
-            try {
-
-                rta = this.base.consulta_usuario("USUARIOS", usuario, pass);
-                if (!rta.next()) {
-                    int dialogButton = JOptionPane.YES_NO_OPTION;
-                    int dialogResult = JOptionPane.showConfirmDialog(null, "¿Desea crear un usuario nuevo?", "No existe el usuario", dialogButton);
-                    if (dialogResult == JOptionPane.YES_OPTION) {
-                        this.base.crear_usuario(usuario, pass);
-                        System.out.println("Crear cuenta");
-                        login = true;
-                    }
-
-                    System.out.println("No existe la cuenta");
-
-                } else {
-                    login = true;
-                }
-
-                if (login == true) {
-                    try {
-                        rta = this.base.consulta_cuentas("contraseñas");
-                        while (rta.next()) {
-                            Cuentas.addItem(rta.getString("Cuenta"));
-                            Cuentas2.addItem(rta.getString("Cuenta"));
-                        }
-                    } catch (Exception e) {
-
-                    }
-                    Slider.add(main_panel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 350, 470));
-                    Slider.nextPanel(5, jPanel2, JPanelSlider.left);
-                }
-            } catch (SQLException ex) {
-
-            }
-        } else {
-            JOptionPane.showMessageDialog(null, "Nombre de usuario o contraseña erroneos");
-        }
-    }//GEN-LAST:event_Boton_ingresoMouseClicked
+        jPanel1.setBackground(color);
+    }//GEN-LAST:event_jPanel1MouseReleased
 
     private void jPanel1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MousePressed
         Color color = new Color(16, 108, 63);
         jPanel1.setBackground(color);
     }//GEN-LAST:event_jPanel1MousePressed
 
-    private void jPanel1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MouseReleased
-        Color color = new Color(25, 162, 95);
-        jPanel1.setBackground(color);
-    }//GEN-LAST:event_jPanel1MouseReleased
-
     private void jPanel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MouseClicked
-        
-        
+
         //rta = base.consulta_base("contraseñas", (String) Cuentas.getSelectedItem(), usuario_log);
-        rta = this.base.consulta_cuentas("contraseñas");
+        rta = base.consulta_base("contraseñas");
         try {
             while (rta.next()) {
                 campo_cuenta.setText((String) Cuentas.getSelectedItem());
-                campo_usuario.setText(rta.getString("Account"));
-                campo_contraseña.setText(rta.getString("Password"));
+                campo_usuario.setText(rta.getString("usuario"));
+                campo_contraseña.setText(rta.getString("contraseña"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }//GEN-LAST:event_jPanel1MouseClicked
+
+    private void CuentasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CuentasActionPerformed
+
+    }//GEN-LAST:event_CuentasActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -630,12 +450,8 @@ public class mainWindow extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Agrega;
-    private javax.swing.JPanel Boton_ingreso;
     private javax.swing.JComboBox<String> Cuentas;
     private javax.swing.JComboBox<String> Cuentas2;
-    private javax.swing.JPasswordField Login_contraseña;
-    private javax.swing.JPanel Login_panel;
-    private javax.swing.JTextField Login_usuario;
     private javax.swing.JButton Modifica;
     private javax.swing.JButton Quita;
     private diu.swe.habib.JPanelSlider.JPanelSlider Slider;
@@ -650,14 +466,10 @@ public class mainWindow extends javax.swing.JFrame {
     private javax.swing.JTextField campo_usuario3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
@@ -670,8 +482,6 @@ public class mainWindow extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator12;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
-    private javax.swing.JSeparator jSeparator4;
-    private javax.swing.JSeparator jSeparator5;
     private javax.swing.JSeparator jSeparator7;
     private javax.swing.JSeparator jSeparator8;
     private javax.swing.JSeparator jSeparator9;
