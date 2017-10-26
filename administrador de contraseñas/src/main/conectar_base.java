@@ -1,51 +1,62 @@
 package main;
 
-import java.io.IOException;
 import java.sql.*;
-import java.util.logging.FileHandler;
-import java.util.logging.Handler;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import org.apache.log4j.*;
 
 public class conectar_base {
-       
-    private Statement miStatement;
+
+    private Statement st;
     private ResultSet rta;
+    private Connection conn;
+    static int ID = 1;
+    private final static Logger log = Logger.getLogger(conectar_base.class);
 
-    public conectar_base(String base, String usuario, String contraseña) {
-        
+    public conectar_base() {
+
         try {
+            String driver = "org.apache.derby.jdbc.EmbeddedDriver";
 
-            //1.Crear conexion 
-            //Connection mi_conexion = DriverManager.getConnection("jdbc:mysql://192.168.0.78:3306/" + base , usuario, contraseña);
-            Connection mi_conexion = DriverManager.getConnection("jdbc:mysql://raspibjuan.redirectme.net:3306/" + base, "root", contraseña);
+            Class.forName(driver);
 
-            //2. Crear objeto Statement
-            miStatement = mi_conexion.createStatement();
+            conn = DriverManager.getConnection("jdbc:derby:" + cfg.host_base + ";create=true");
 
-            //4.Leer el resultset
-            //while (rta.next()) {
-            //   System.out.println("Contraseña: " + rta.getString("Contraseña") + " Usuario: " + rta.getString("Usuario"));
-            //}
         } catch (SQLException e) {
-            try {
-                Connection mi_conexion = DriverManager.getConnection("jdbc:mysql://192.168.0.78:3306/" + base , usuario, contraseña);
-                //Connection mi_conexion = DriverManager.getConnection("jdbc:mysql://raspibjuan.redirectme.net:3306/" + base, usuario, contraseña);
-                miStatement = mi_conexion.createStatement();
-            } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(null, "No hay conexion con la base de datos");
-            }
+            JOptionPane.showMessageDialog(null, "No hay conexion con la base de datos");
+            log.error("No hay conexion con la base de datos");
+            System.exit(0);
+        } catch (ClassNotFoundException ex) {
+            JOptionPane.showMessageDialog(null, "No hay conexion con la base de datos");
+            log.error("No hay conexion con la base de datos 1");         
+            System.exit(0);
         }
     }
 
-    public ResultSet consulta_base(String tabla, String cuenta) {
+    public void crear_tabla() {
+        try {
+            st = conn.createStatement();
+            DatabaseMetaData dbmd = conn.getMetaData();
+            ResultSet rs = dbmd.getTables(null, null, "CONTRASEÑAS", null);
+            if (!rs.next()) {
+                st.execute("CREATE TABLE contraseñas ( "
+                        + "Cuenta VARCHAR(25) NOT NULL, "
+                        + "Usuario VARCHAR(25) NOT NULL, "
+                        + "Contraseña VARCHAR(25) NOT NULL "
+                        + ")");
+            }
+
+        } catch (Exception e) {
+            log.error("No se pudo crear la tabla CONTRASEÑAS");
+        }
+    }
+
+    public ResultSet consulta_base(String tabla) {
         try {
             //3. Ejecutar SQL
-            rta = miStatement.executeQuery("SELECT * FROM " + tabla + " WHERE CUENTA = '" + cuenta + "'");
+            rta = st.executeQuery("SELECT * FROM " + tabla);
+           
         } catch (SQLException ex) {
-            //Logger.getLogger(conecta_base.class.getName()).log(Level.SEVERE, null, ex);
-            ex.printStackTrace();
+            log.error("Error en consulta_base");
         }
         return rta;
     }
@@ -53,67 +64,46 @@ public class conectar_base {
     public ResultSet consulta_cuentas(String tabla) {
         try {
             //3. Ejecutar SQL
-            rta = miStatement.executeQuery("SELECT Cuenta FROM " + tabla);
+            rta = st.executeQuery("SELECT CUENTA FROM " + tabla);
+
         } catch (SQLException ex) {
-            //Logger.getLogger(conecta_base.class.getName()).log(Level.SEVERE, null, ex);
-            ex.printStackTrace();
+            log.error("Error en consulta_cuentas");
         }
         return rta;
     }
 
     public void insertar_cuenta(String cuenta, String usuario, String contraseña) {
-        String instruccionSQL = "INSERT INTO contraseñas (Cuenta, Usuario, Contraseña) " +
-                                "VALUES ('" + cuenta + "','" + usuario + "','" + contraseña + "')";
+        String instruccionSQL = "INSERT INTO contraseñas "
+                + "VALUES ('" + cuenta + "','" + usuario + "','" + contraseña + "')";
         try {
-            miStatement.executeUpdate(instruccionSQL);
+            st.executeUpdate(instruccionSQL);
             JOptionPane.showMessageDialog(null, "La cuenta se ha creado correctamente");
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "No se pudo crear la cuenta, por favor intente nuevamente mas tarde");
+            log.error("Error en insertar_cuenta");
         }
     }
 
     public void quitar_cuenta(String cuenta) {
         String instruccionSQL = "DELETE FROM contraseñas WHERE Cuenta = '" + cuenta + "'";
         try {
-            miStatement.executeUpdate(instruccionSQL);
+            st.executeUpdate(instruccionSQL);
             JOptionPane.showMessageDialog(null, "La cuenta se ha eliminado correctamente");
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "No se pudo eliminar la cuenta, por favor intente nuevamente mas tarde");
+            log.error("Error en quitar_cuenta");
         }
     }
 
     public void modificar_cuenta(String cuenta, String usuario, String contraseña) {
-        String instruccionSQL = "UPDATE contraseñas SET Usuario = '" + usuario + "', Contraseña = '" + contraseña +
-                                "' WHERE Cuenta = '" + cuenta + "'";
+        String instruccionSQL = "UPDATE contraseñas SET Usuario = '" + usuario + "', Contraseña = '" + contraseña
+                + "' WHERE Cuenta = '" + cuenta + "'";
         try {
-            miStatement.executeUpdate(instruccionSQL);
+            st.executeUpdate(instruccionSQL);
             JOptionPane.showMessageDialog(null, "La cuenta se ha modificado correctamente");
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "No se pudo modificar la cuenta, por favor intente nuevamente mas tarde");
+            log.error("Error en modificar_cuenta");
         }
     }
-    
-    public void crear_usuario(String usuario, String contraseña){
-        String instruccionSQL = "CREATE DATABASE " + usuario;
-        String serverIP =  "raspibjuan.redirectme.net";
-        Statement miStatement;
-        try {
-            Connection mi_conexion = DriverManager.getConnection("jdbc:mysql://raspibjuan.redirectme.net:3306/" + usuario, usuario , contraseña);
-            miStatement = mi_conexion.createStatement();
-            this.miStatement.executeUpdate(instruccionSQL);
-            miStatement.executeUpdate("CREATE USER '" + usuario + "'@'" + serverIP + "' IDENTIFIED BY '" + contraseña + "'");
-            miStatement.executeUpdate("GRANT ALL PRIVILEGES ON " + usuario + ".* TO '" + usuario + "'@'" + serverIP + "'");
-            miStatement.executeUpdate("FLUSH PRIVILEGES");
-             
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "No se pudo crear el usuario, por favor intente nuevamente mas tarde");
-        }
-    }
-    
-    private void crear_tabla(String nombre_tabla) throws SQLException{
-        String instruccionSQL = "CREATE TABLE " + nombre_tabla + "(Cuenta VARCHAR(30), Usuario VARCHAR(30), Contraseña VARCHAR(30))";
-        miStatement.executeUpdate(instruccionSQL);
-        
-    }
-    
 }
