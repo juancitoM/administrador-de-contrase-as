@@ -4,13 +4,14 @@ package main;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
+import org.apache.log4j.*;
 import java.util.Properties;
 
 public class cfg {
 
     public static String host_base;
-
+    private final static Logger log = Logger.getLogger(conectar_base.class);
+    
     public cfg() {
         //InputStreamReader fileStream = new InputStreamReader(cfg.class.getResourceAsStream("Config.ini"));        
         
@@ -24,9 +25,9 @@ public class cfg {
             file.close();
 
         } catch (FileNotFoundException ex) {
-            // file does not exist
+            log.error("No se encontro el archivo de configuracion ");// file does not exist
         } catch (IOException ex) {
-            // I/O error
+          log.error("No se encontro el archivo de configuracion ");
         }
 
     }

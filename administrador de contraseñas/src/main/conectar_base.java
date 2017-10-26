@@ -26,7 +26,8 @@ public class conectar_base {
             log.error("No hay conexion con la base de datos");
             System.exit(0);
         } catch (ClassNotFoundException ex) {
-            log.error("No hay conexion con la base de datos");         
+            JOptionPane.showMessageDialog(null, "No hay conexion con la base de datos");
+            log.error("No hay conexion con la base de datos 1");         
             System.exit(0);
         }
     }

@@ -21,10 +21,7 @@ public class mainWindow extends javax.swing.JFrame {
     public mainWindow() {
         initComponents();
         setIconImage(new ImageIcon(getClass().getResource("/imagenes/Key 2_80px.png")).getImage());
-        //Slider.remove(main_panel);
-        //System.out.println(System.getProperties("user.dir"));
         new cfg();
-        //PropertyConfigurator.configure(getClass().getResource("/main/log4j.properties"));
         PropertyConfigurator.configure("log4j.properties");
         base = new conectar_base();
         base.crear_tabla();
@@ -32,11 +29,11 @@ public class mainWindow extends javax.swing.JFrame {
         try {
             while (rta.next()) {
                 Cuentas.addItem(rta.getString("cuenta"));
+                Cuentas2.addItem(rta.getString("cuenta"));
             }
         } catch (SQLException ex) {
             log.error("No se pueden agregar las cuentas");
         }
-
     }
 
     @SuppressWarnings("unchecked")
