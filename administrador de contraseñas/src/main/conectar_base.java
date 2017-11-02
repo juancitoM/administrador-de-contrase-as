@@ -50,13 +50,13 @@ public class conectar_base {
         }
     }
 
-    public ResultSet consulta_base(String tabla) {
+    public ResultSet consulta_base(String tabla, String cuenta) {
         try {
             //3. Ejecutar SQL
-            rta = st.executeQuery("SELECT * FROM " + tabla);
+            rta = st.executeQuery("SELECT * FROM " + tabla + " where cuenta = '" + cuenta + "'");
            
         } catch (SQLException ex) {
-            log.error("Error en consulta_base");
+            log.error(ex.toString() + " Error en consulta_base");
         }
         return rta;
     }

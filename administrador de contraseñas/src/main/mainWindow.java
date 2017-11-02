@@ -2,7 +2,7 @@ package main;
 
 /*
 
-Versionado del programa = 2017.05.1r1
+Versionado del programa = 2017.11.2r1
 
  */
 import java.awt.Color;
@@ -13,13 +13,14 @@ import org.apache.log4j.*;
 
 public class mainWindow extends javax.swing.JFrame {
 
-    private String version$ = "2017.05.1r1";
+    private String version$ = "2017.11.2r1";
     private ResultSet rta;
     private conectar_base base;
     private static final Logger log = Logger.getLogger(mainWindow.class);
     
     public mainWindow() {
         initComponents();
+        Version.setText(version$);
         setIconImage(new ImageIcon(getClass().getResource("/imagenes/Key 2_80px.png")).getImage());
         new cfg();
         PropertyConfigurator.configure("log4j.properties");
@@ -55,6 +56,7 @@ public class mainWindow extends javax.swing.JFrame {
         campo_usuario = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jLabel13 = new javax.swing.JLabel();
+        Version = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
         jSeparator7 = new javax.swing.JSeparator();
@@ -162,6 +164,9 @@ public class mainWindow extends javax.swing.JFrame {
         );
 
         jPanel2.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 376, 170, 30));
+
+        Version.setForeground(new java.awt.Color(255, 255, 255));
+        jPanel2.add(Version, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 420, 70, 10));
 
         main_panel.addTab("Consulta", jPanel2);
 
@@ -398,7 +403,7 @@ public class mainWindow extends javax.swing.JFrame {
     private void jPanel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MouseClicked
 
         //rta = base.consulta_base("contraseñas", (String) Cuentas.getSelectedItem(), usuario_log);
-        rta = base.consulta_base("contraseñas");
+        rta = base.consulta_base("contraseñas", (String) Cuentas.getSelectedItem());
         try {
             while (rta.next()) {
                 campo_cuenta.setText((String) Cuentas.getSelectedItem());
@@ -407,7 +412,7 @@ public class mainWindow extends javax.swing.JFrame {
             }
         } catch (SQLException e) {
             //e.printStackTrace();
-            log.error("Error consultando cuentas");
+            log.error(e.toString() + "Error consultando cuentas");
         }
     }//GEN-LAST:event_jPanel1MouseClicked
 
@@ -450,6 +455,7 @@ public class mainWindow extends javax.swing.JFrame {
     private javax.swing.JButton Modifica;
     private javax.swing.JButton Quita;
     private diu.swe.habib.JPanelSlider.JPanelSlider Slider;
+    private javax.swing.JLabel Version;
     private javax.swing.JLabel campo_contraseña;
     private javax.swing.JTextField campo_contraseña2;
     private javax.swing.JTextField campo_contraseña3;
